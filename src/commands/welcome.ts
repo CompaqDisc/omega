@@ -1,4 +1,4 @@
-import { Command, CommandContext, Embed, getGuildWelcomeUrl } from '../../deps.ts';
+import { Command, CommandContext, Embed, OmegaDB } from '../../deps.ts';
 
 export default class WelcomeCommand extends Command {
     name = 'welcome'
@@ -7,9 +7,9 @@ export default class WelcomeCommand extends Command {
 
     execute(ctx: CommandContext): void {
         const guildId = ctx.message.guild?.id
-        let welcomeUrlQuery = undefined
-        if (guildId !== undefined) welcomeUrlQuery = getGuildWelcomeUrl(guildId)
-        const footerString = (welcomeUrlQuery !== undefined) ? `${ctx.guild?.name} invites you to visit ${welcomeUrlQuery[0]}` : `${ctx.guild?.name} welcomes you to the server`
+        const welcomeUrl = OmegaDB.getGuildWelcomeUrl(guildId)
+        const footerString = (welcomeUrl !== undefined) ? `${ctx.guild?.name} invites you to visit ${welcomeUrl}` : `${ctx.guild?.name} welcomes you to the server`
+
         ctx.channel.send({
             embed: new Embed()
                 .setAuthor({

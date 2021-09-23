@@ -1,5 +1,5 @@
-import { dbInit, event, CommandClient, command, CommandContext, GatewayIntents } from '../deps.ts';
-//import { dbInit, setGuildPrefix, getGuildPrefix, setGuildWelcomeUrl, getGuildWelcomeUrl } from '../deps.ts';
+import { OmegaDB, event, CommandClient, command, CommandContext, GatewayIntents } from '../deps.ts';
+//import { doWelcomeFor } from './util/welcome.ts';
 import "https://deno.land/x/dotenv@v3.0.0/load.ts";
 import Logger from "https://deno.land/x/logger@v1.0.0/logger.ts";
 
@@ -12,17 +12,29 @@ class OmegaClient extends CommandClient {
         super({
             prefix: ['~'],
             caseSensitive: false,
-            allowBots: false
+            allowBots: false,
+            presence: {
+                name: 'Awaiting your command...',
+                type: 'CUSTOM_STATUS'
+            }
         });
 
         this.commands.loader.loadDirectory('./src/commands');
-        dbInit()
+        OmegaDB.init()
     }
 
     @event()
     ready(): void {
         this.logger.info(`Logged in as ${this.user?.tag}!`);
     }
+
+    // @event()
+    // async guildMemberAdd(member: Member): Promise<void> {
+    //     const channels = await member.guild.channels.array()
+    //     if (OmegaDB.isGuildWelcomeEnabled(member.guild.id))
+
+    //     doWelcomeFor(member.user, channels.filter(c=>c.name==='general'))
+    // }
 
     @command({ aliases: 'pong' })
     ping(ctx: CommandContext): void {
