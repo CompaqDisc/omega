@@ -5,7 +5,7 @@ const dbfile = Deno.env.get('OMEGA_DB')
 const db = new DB(`./${dbfile}`)
 
 export class OmegaDB {
-    static readonly default_prefix = Deno.env.get('DEFAULT_PREFIX');
+    static readonly default_prefix = Deno.env.get('DEFAULT_PREFIX') as string;
 
     static init() {
         db.query(

@@ -1,5 +1,6 @@
-import { ButtonStyle, Command, CommandContext, Embed, MessageComponents } from '../../deps.ts';
-import { VERSION } from '../../index.ts';
+import { ButtonStyle, Command, CommandContext, Embed, MessageComponents } from '../../deps.ts'
+import { OmegaDB } from '../db.ts'
+import { VERSION } from '../../index.ts'
 
 export default class AboutCommand extends Command {
     name = 'about'
@@ -8,19 +9,21 @@ export default class AboutCommand extends Command {
     category = 'general'
 
     async execute(ctx: CommandContext): Promise<void> {
+        const prefix = OmegaDB.getGuildPrefix(ctx.guild?.id)
+
         ctx.message.reply({
             reply: ctx.message,
             embed: new Embed()
-                .setAuthor({
-                    name: 'Omega',
-                    url: 'https://theomega.zone/',
-                    icon_url: 'https://cdn.discordapp.com/avatars/747551324849307810/fb85aa37b55ef67efdf45df0322a5a2d.png'
-                })
+                // .setAuthor({
+                //     name: 'Omega',
+                //     url: 'https://theomega.zone/',
+                //     icon_url: 'https://cdn.discordapp.com/avatars/747551324849307810/fb85aa37b55ef67efdf45df0322a5a2d.png'
+                // })
                 .setTitle('Awaiting your command...')
-                .setDescription('I\'m listening to messages starting with `~`, so feel free to ask for `~help`')
+                .setDescription(`I\'m listening to messages starting with \`${prefix}\`, so feel free to ask for \`${prefix}help\``)
                 .addField({
                     name: 'Prefix',
-                    value: '`~`',
+                    value: `\`${prefix}\``,
                     inline: true
                 })
                 .addField({

@@ -1,22 +1,25 @@
-import { Command, CommandContext } from '../../deps.ts';
+import { Args, Command, CommandContext, parseArgs } from '../../deps.ts';
 
 export default class RollCommand extends Command {
     name = 'roll'
     aliases = [ 'random', 'rand' ]
     usage = ['', '<max-value>']
-    examples = ['', '100', '500']
-    description = 'random number in range `1 <= x <= 100`'
+    description = 'roll a random number'
     category = 'utility'
-
-    execute(ctx: CommandContext): void {
-        let max = 100;
-
-        if ( ctx.rawArgs.length === 1 ) {
-            max = Number.parseInt(ctx.rawArgs[0])
+    commandArgs: Args[] = [
+        {
+            name: 'max',
+            match: 'rest',
+            defaultValue: '100'
         }
+    ]
 
-        const choice = Math.floor(Math.random() * max) + 1
+    async execute(ctx: CommandContext): Promise<void> {
+        const parsed = await parseArgs(this.commandArgs, ctx.rawArgs, ctx.message)
+        const maxValue = Number.parseInt(parsed?.max as unknown as string)
 
-        ctx.message.reply(`**${ctx.author.nickMention} rolls ${choice}** (1-${max})`)
+        const choice = Math.floor(Math.random() * maxValue) + 1
+
+        ctx.message.reply(`**${ctx.author.nickMention} rolls ${choice}** (1-${maxValue})`)
     }
 }

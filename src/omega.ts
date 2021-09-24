@@ -3,14 +3,19 @@ import { OmegaDB, event, CommandClient, command, CommandContext, GatewayIntents 
 import "https://deno.land/x/dotenv@v3.0.0/load.ts";
 import Logger from "https://deno.land/x/logger@v1.0.0/logger.ts";
 
-class OmegaClient extends CommandClient {
-    readonly logger = new Logger();
-    readonly discord_token = Deno.env.get('DISCORD_TOKEN');
-    readonly discord_app_id = Deno.env.get('DISCORD_APP_ID');
+import { VERSION } from '../index.ts';
+
+const DISCORD_TOKEN = Deno.env.get('DISCORD_TOKEN');
+const DISCORD_APP_ID = Deno.env.get('DISCORD_APP_ID');
+
+export class OmegaClient extends CommandClient {
+    logger: Logger
+    version: string
 
     constructor() {
         super({
             prefix: ['~'],
+            mentionPrefix: true,
             caseSensitive: false,
             allowBots: false,
             presence: {
@@ -19,8 +24,16 @@ class OmegaClient extends CommandClient {
             }
         });
 
-        this.commands.loader.loadDirectory('./src/commands');
+        this.version = VERSION;
+        this.applicationID = DISCORD_APP_ID;
+        this.logger = new Logger()
         OmegaDB.init()
+
+        this.commands.loader.loadDirectory('./src/commands');
+
+        this.getGuildPrefix = function(guildId: string) {
+            return OmegaDB.getGuildPrefix(guildId)
+        }
     }
 
     @event()
@@ -74,7 +87,7 @@ class OmegaClient extends CommandClient {
 }
 
 const client = new OmegaClient();
-client.connect(client.discord_token, [
+client.connect(DISCORD_TOKEN, [
     GatewayIntents.DIRECT_MESSAGES,
     GatewayIntents.GUILDS,
     GatewayIntents.GUILD_MESSAGES,
