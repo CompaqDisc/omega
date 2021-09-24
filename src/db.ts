@@ -24,7 +24,7 @@ export class OmegaDB {
         if (guildId === undefined) return
 
         db.query(
-            `INSERT INTO guilds(id, added_at, setting.prefix) VALUES(?, ?, ?) ON CONFLICT(id) DO UPDATE SET "setting.prefix" = ?;`,
+            `INSERT INTO guilds(id, added_at, "setting.prefix") VALUES(?, ?, ?) ON CONFLICT(id) DO UPDATE SET "setting.prefix" = ?;`,
             [guildId, +new Date(), prefix, prefix]
         )
     }
