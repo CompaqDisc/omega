@@ -15,7 +15,8 @@ export class OmegaDB {
                 "setting.prefix" TEXT NOT NULL DEFAULT '~',
                 "setting.welcome.enabled" TEXT NOT NULL DEFAULT 'true',
                 "setting.welcome.message" TEXT NOT NULL DEFAULT 'Thanks for joining us!',
-                "setting.welcome.url" TEXT
+                "setting.welcome.url" TEXT,
+                "privileged_roles" TEXT
             )`
         )
     }
@@ -92,5 +93,26 @@ export class OmegaDB {
         if (row === undefined) return undefined
 
         return row[0] as string
+    }
+
+    static addGuildPrivilegedRole(guildID: string, roleID: string): void {
+        const roles = this.getGuildPrivilegedRoles(guildID)
+        if (!roles.includes(roleID)) roles.push(roleID)
+        this.setGuildPrivilegedRoles(guildID, roles)
+    }
+
+    static setGuildPrivilegedRoles(guildID: string, roleIDs: string[]) {
+        const list = JSON.stringify(roleIDs)
+        db.query(
+            `INSERT INTO guilds(id, added_at, privileged_roles) VALUES(?, ?, ?) ON CONFLICT(id) DO UPDATE SET privileged_roles = ?;`,
+            [guildID, +new Date(), list, list]
+        )
+    }
+
+    static getGuildPrivilegedRoles(guildID: string): string[] {
+        const row = db.query(`SELECT "privileged_roles" FROM guilds WHERE id = ?`, [guildID])[0]
+        if (!row[0]) return []
+
+        return JSON.parse(row[0] as string)
     }
 }

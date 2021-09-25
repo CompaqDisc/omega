@@ -1,6 +1,6 @@
-import { ButtonStyle, Command, CommandContext, Embed, MessageComponents } from '../../deps.ts';
+import { ButtonStyle, Command, CommandContext, Embed, MessageComponents } from '../deps.ts';
 
-export default class SettingsCommand extends Command {
+export class SettingsCommand extends Command {
     name = 'settings'
     description = 'configures omega'
     category = 'config'

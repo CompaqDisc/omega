@@ -1,8 +1,6 @@
-import { ButtonStyle, Command, CommandContext, Embed, MessageComponents } from '../../deps.ts'
-import { OmegaDB } from '../db.ts'
-import { VERSION } from '../../index.ts'
+import { ButtonStyle, Command, CommandContext, Embed, MessageComponents, OmegaDB, VERSION } from '../deps.ts'
 
-export default class AboutCommand extends Command {
+export class AboutCommand extends Command {
     name = 'about'
     aliases = [ 'why', 'bot', 'info' ]
     description = 'information about Omega'

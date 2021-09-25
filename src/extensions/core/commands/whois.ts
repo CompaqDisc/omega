@@ -1,8 +1,8 @@
-import { Args, Command, CommandContext, Embed, parseArgs, User, Member } from '../../deps.ts';
+import { Args, Command, CommandContext, Embed, parseArgs, User, Member } from '../deps.ts';
 
-export default class RollCommand extends Command {
-    name = 'whoami'
-    aliases = [ 'whois' ]
+export class WhoisCommand extends Command {
+    name = 'whois'
+    aliases = [ 'whoami' ]
     usage = [ '', '<user>' ]
     description = 'displays information about a user'
     category = 'utility'

@@ -1,6 +1,6 @@
-import { Command, CommandContext, Embed } from '../../deps.ts';
+import { Command, CommandContext, Embed } from '../deps.ts';
 
-export default class HelpCommand extends Command {
+export class HelpCommand extends Command {
     name = 'help'
     aliases = [ '?', 'wtf' ]
     description = 'you aint gonna get no help'
@@ -19,6 +19,8 @@ export default class HelpCommand extends Command {
                 .setDescription('Commands with a ~~strikethough~~ are unavailable.')
                 .addField('general', '`about`\n`welcome`', true)
                 .addField('utility', '`help`\n`roll`\n`whoami`', true)
+                .addField('moderation', '`roles <add|remove> <role>`', true)
+                .addField('configuration', '`prefix [new_prefix]`', true)
                 .setColor(0x1ABC9C)
         })
     }

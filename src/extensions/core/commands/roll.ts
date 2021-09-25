@@ -1,6 +1,6 @@
-import { Args, Command, CommandContext, parseArgs } from '../../deps.ts';
+import { Args, Command, CommandContext, parseArgs } from '../deps.ts';
 
-export default class RollCommand extends Command {
+export class RollCommand extends Command {
     name = 'roll'
     aliases = [ 'random', 'rand' ]
     usage = ['', '<max-value>']
